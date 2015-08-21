@@ -87,6 +87,7 @@ module LiveJournal
       @props = {}
     end
 
+    # when we compare two entries, we don't compare all fields
     def ==(other)
       return false if self.class != other.class
       
@@ -96,6 +97,10 @@ module LiveJournal
        :screening, :props].each do |attr|
         return false if send(attr) != other.send(attr)
       end
+      compare_time(other)
+    end
+
+    def compare_time(other)
       # compare time fields one-by-one because livejournal ignores the
       # "seconds" field.
       [:year, :mon, :day, :hour, :min, :zone].each do |attr|
