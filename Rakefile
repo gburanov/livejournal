@@ -15,7 +15,7 @@ begin
     gem.description = %q{LiveJournal module.  Post to livejournal, retrieve friends lists, edit entries, sync journal to an offline database.}
     gem.email = 'romanbsd@yahoo.com'
     gem.homepage = 'http://neugierig.org/software/livejournal/ruby/'
-    gem.authors = ['Evan Martin', 'Roman Shterenzon']
+    gem.authors = ['Evan Martin', 'Roman Shterenzon', 'Georgy Buranov']
     gem.files = FILES.to_a
   end
   Jeweler::GemcutterTasks.new
