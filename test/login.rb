@@ -4,9 +4,11 @@ require 'livejournal/login'
 require 'livejournal/entry'
 require 'test/unit'
 
+require_relative 'credentials'
+
 class TC_Login < Test::Unit::TestCase
   def setup
-    @user = LiveJournal::User.new('test', 'test')
+    @user = default_test_user
   end
 
   def test_login

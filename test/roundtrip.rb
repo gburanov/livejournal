@@ -5,11 +5,13 @@ $:.unshift '../lib'
 require 'livejournal/entry'
 require 'test/unit'
 
+require_relative 'credentials'
+
 include LiveJournal
 
 class TC_RoundTrip < Test::Unit::TestCase
   def setup
-    @user = User.new('ljrb_test', 'test_ljrb')
+    @user = default_test_user
   end
 
   def roundtrip entry
