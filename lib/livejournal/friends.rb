@@ -68,6 +68,8 @@ module LiveJournal
   end
 
   module Request
+
+    # Obtains list of friends
     class Friends < Req
       attr_reader :friends, :friendofs
       # Allowed options:
@@ -87,6 +89,7 @@ module LiveJournal
       end
     end
 
+    # Obtains list of friendofs
     # See Friends to fetch both friends and friend-ofs in one request.
     class FriendOfs < Req
       attr_reader :friendofs
@@ -102,6 +105,7 @@ module LiveJournal
       end
     end
 
+    # Returns true of false depending on
     # An example of polling for friends list updates.
     #   req = LiveJournal::Request::CheckFriends.new(user)
     #   req.run   # always will return false on the first run.

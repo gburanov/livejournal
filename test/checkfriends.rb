@@ -22,8 +22,9 @@ class TC_CheckFriends < Test::Unit::TestCase
 
   def test_false
     # Absurd date that will always be false.
-    checkfriend = LiveJournal::Request::CheckFriends.new(@user, "2010-01-10 12:40:00")
+    checkfriend = LiveJournal::Request::CheckFriends.new(@user, "2020-01-10 12:40:00")
     new = checkfriend.run
+    puts "New is " + new.inspect
     assert(!new)
   end
 end
