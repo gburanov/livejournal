@@ -89,6 +89,11 @@ module LiveJournal
         p request if @verbose
         return if @dryrun
         response = h.post('/interface/flat', request, {"User-Agent" => "ljrb/0.3.x"})
+        content_type = response['content-type']
+        content_type = content_type[(content_type.rindex('=') + 1)..-1]
+        #puts "Content type is " + content_type
+        response.body.force_encoding(content_type)
+
         data = response.read_body
         parseresponse(data)
         dumpresponse if @verbose

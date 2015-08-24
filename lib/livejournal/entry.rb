@@ -66,7 +66,14 @@ module LiveJournal
     KNOWN_EXTRA_PROPS = %w{admin_content_flag adult_content commentalter
       current_coords personifi_lang personifi_tags personifi_word_count
       qotdid revnum revtime sms_msgid statusvis syn_id syn_link unknown8bit
-      unsuspend_supportid used_rte useragent verticals_list poster_ip uniq}
+      unsuspend_supportid used_rte useragent verticals_list poster_ip uniq langs}
+
+    def self.item_id_from_public_id id
+      # based on this story
+      # http://drumrock.skipitnow.org/livejournal-tools/itemid/
+      anum = id - Float(id / 256).floor * 256;
+      return (id - anum) / 256;
+    end
 
     def initialize
       @subject = nil
@@ -87,6 +94,7 @@ module LiveJournal
       @props = {}
     end
 
+    # when we compare two entries, we don't compare all fields
     def ==(other)
       return false if self.class != other.class
       
@@ -96,6 +104,10 @@ module LiveJournal
        :screening, :props].each do |attr|
         return false if send(attr) != other.send(attr)
       end
+      compare_time(other)
+    end
+
+    def compare_time(other)
       # compare time fields one-by-one because livejournal ignores the
       # "seconds" field.
       [:year, :mon, :day, :hour, :min, :zone].each do |attr|
@@ -290,6 +302,19 @@ module LiveJournal
       end
     end
 
+    class EventsList < Hash
+
+      def find_by_display_id id
+        self.each do |key, event|
+          if event.display_itemid == id
+            return event
+          end
+        end
+        nil
+      end
+
+    end
+
     class GetEvents < Req
       # We support three different types of GetEvents:
       # * <tt>GetEvents.new(user, :itemid => itemid)</tt> (fetch a single item)
@@ -336,7 +361,7 @@ module LiveJournal
       def run
         super
 
-        entries = {}
+        entries = EventsList.new
         each_in_array('events') do |req|
           entry = Entry.new.from_request(req)
           entries[entry.itemid] = entry
