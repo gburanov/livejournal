@@ -117,6 +117,7 @@ module LiveJournal
     def from_request(req)
       @itemid, @anum = req['itemid'].to_i, req['anum'].to_i
       @subject, @event = req['subject'], CGI.unescape(req['event'])
+      @subject = @subject.encode("utf_8")
 
       case req['security']
       when 'public'
@@ -295,6 +296,19 @@ module LiveJournal
       end
     end
 
+    class EventsList < Hash
+
+      def find_by_display_id id
+        self.each do |key, event|
+          if event.display_itemid == id
+            return event
+          end
+        end
+        nil
+      end
+
+    end
+
     class GetEvents < Req
       # We support three different types of GetEvents:
       # * <tt>GetEvents.new(user, :itemid => itemid)</tt> (fetch a single item)
@@ -341,7 +355,7 @@ module LiveJournal
       def run
         super
 
-        entries = {}
+        entries = EventsList.new
         each_in_array('events') do |req|
           entry = Entry.new.from_request(req)
           entries[entry.itemid] = entry
