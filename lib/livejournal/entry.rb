@@ -68,6 +68,13 @@ module LiveJournal
       qotdid revnum revtime sms_msgid statusvis syn_id syn_link unknown8bit
       unsuspend_supportid used_rte useragent verticals_list poster_ip uniq langs}
 
+    def self.item_id_from_public_id id
+      # based on this story
+      # http://drumrock.skipitnow.org/livejournal-tools/itemid/
+      anum = id - Float(id / 256).floor * 256;
+      return (id - anum) / 256;
+    end
+
     def initialize
       @subject = nil
       @event = nil
@@ -117,7 +124,6 @@ module LiveJournal
     def from_request(req)
       @itemid, @anum = req['itemid'].to_i, req['anum'].to_i
       @subject, @event = req['subject'], CGI.unescape(req['event'])
-      @subject = @subject.encode("utf_8")
 
       case req['security']
       when 'public'
