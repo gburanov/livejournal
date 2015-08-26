@@ -35,8 +35,11 @@ require 'livejournal/comment'
 module LiveJournal
   module Request
 
+    # Syncs just items ids
+    # The entries themself are not synced
     class SyncItems < Req
       attr_reader :syncitems, :fetched, :total
+
       def initialize(user, syncitems=nil, lastsync=nil)
         super(user, 'syncitems')
         @syncitems = syncitems || {}
@@ -62,6 +65,10 @@ module LiveJournal
         syncitems.keys
       end
 
+      def subset(type = 'L')
+        return SyncItems.subset_items(@syncitems, type).keys
+      end
+
       def self.subset_items(syncitems, want_type='L')
         items = {}
         syncitems.each do |item, time|
@@ -71,6 +78,7 @@ module LiveJournal
         end
         items
       end
+
     end
 
     # This is only used for generating sessions used for syncing comments.
@@ -103,6 +111,7 @@ module LiveJournal
         @logitems = {}
         @lastsync = lastsync
       end
+
       def run_syncitems  # :yields: cur, total
         cur = 0
         total = nil
