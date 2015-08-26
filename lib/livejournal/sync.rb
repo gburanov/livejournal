@@ -34,6 +34,7 @@ require 'livejournal/comment'
 
 module LiveJournal
   module Request
+
     class SyncItems < Req
       attr_reader :syncitems, :fetched, :total
       def initialize(user, syncitems=nil, lastsync=nil)
@@ -55,6 +56,10 @@ module LiveJournal
           @syncitems[item] = time
         end
         lasttime
+      end
+
+      def all
+        syncitems.keys
       end
 
       def self.subset_items(syncitems, want_type='L')

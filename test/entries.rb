@@ -13,6 +13,15 @@ class TC_ReadExistingEntries < Test::Unit::TestCase
     @user = default_test_user
   end
 
+  def test_zero_lastsync
+    request = LiveJournal::Request::GetEvents.new(@user, :lastsync => nil)
+
+    entries = request.run
+    #puts "Entries " + entries.inspect
+
+    assert_not_nil entries.length > 3
+  end
+
   def test_read_entry_by_number
     request = LiveJournal::Request::GetEvents.new(@user,
       :itemid => LiveJournal::Entry.item_id_from_public_id(2357))
