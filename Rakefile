@@ -1,8 +1,10 @@
 require 'rdoc/task'
 require 'rake/testtask'
 
+require_relative 'lib/livejournal/version'
+
 FILES = FileList[
-  'Rakefile', 'README.md', 'Changes', 'LICENSE', 'setup.rb', 'VERSION',
+  'Rakefile', 'README.md', 'Changes', 'LICENSE', 'setup.rb',
   'lib/**/*', 'sample/*', 'test/*'
 ]
 
@@ -11,6 +13,7 @@ begin
   Jeweler::Tasks.new do |gem|
     # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
     gem.name = 'livejournal'
+    gem.version = Livejournal::Version::STRING
     gem.summary = 'Module for interacting with livejournal'
     gem.description = %q{LiveJournal module.  Post to livejournal, retrieve friends lists, edit entries, sync journal to an offline database.}
     gem.email = 'romanbsd@yahoo.com'
