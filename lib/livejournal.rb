@@ -1,6 +1,7 @@
 require 'livejournal/entry'
 require 'livejournal/login'
+require 'livejournal/version'
 
 module LiveJournal
-  VERSION = File.read(File.expand_path('../../VERSION',__FILE__)).chomp.freeze
+  VERSION = Livejournal::Version::STRING
 end
