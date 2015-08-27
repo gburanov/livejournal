@@ -4,6 +4,7 @@
 
 require 'livejournal/login'
 require 'livejournal/sync'
+require 'livejournal/filter'
 
 require 'test/unit'
 require_relative 'credentials'
@@ -41,6 +42,11 @@ class TC_SyncEntries < Test::Unit::TestCase
       assert_equal entries.length, 4
       assert_equal remaining, 0
       assert_equal entries[9].subject, "Запись3 "
+
+      # test tag filter at the same point of time
+      tag_entries = LiveJournal::Filter.new(entries).by_tag('tag2')
+      assert_equal tag_entries.length, 2
+      #puts "Entries " + tag_entries.inspect
     end
 
   end
